@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <button id="theme-toggle">🌙</button>
+    <div class="container">
+        <div id="auth-section">
+            <h1>Invoice Generator</h1>
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Password">
+            <button id="signup">Sign Up</button>
+            <button id="login">Log In</button>
+            <button id="logout" style="display:none;">Log Out</button>
+            <div id="user-status"></div>
+        </div>
+        <form id="invoice-form" style="display:none;">
+            <section>
+                <h2>Your Company</h2>
+                <input type="text" id="company-name" placeholder="Company Name" required>
+                <input type="text" id="company-address" placeholder="Address">
+                <input type="email" id="company-email" placeholder="Email">
+                <input type="file" id="logo" accept="image/*">
+            </section>
+            <section>
+                <h2>Client Details</h2>
+                <input type="text" id="client-name" placeholder="Client Name" required>
+                <input type="text" id="client-address" placeholder="Client Address">
+                <input type="email" id="client-email" placeholder="Client Email">
+            </section>
+            <section>
+                <h2>Invoice Info</h2>
+                <input type="text" id="invoice-number" placeholder="Invoice Number" required>
+                <input type="date" id="invoice-date" required>
+                <input type="date" id="due-date" placeholder="Due Date">
+                <select id="currency" required>
+                    <option value="USD" selected>USD ($)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="GBP">GBP (£)</option>
+                    <option value="JPY">JPY (¥)</option>
+                    <option value="CNY">CNY (¥)</option>
+                    <option value="AUD">AUD ($)</option>
+                    <option value="CAD">CAD ($)</option>
+                </select>
+            </section>
+            <section id="items">
+                <h2>Items/Services</h2>
+                <div class="item-row">
+                    <input type="text" class="description" placeholder="Description" required>
+                    <input type="number" class="quantity" placeholder="Qty" min="1" required>
+                    <input type="number" class="rate" placeholder="Rate" step="0.01" required>
+                    <button type="button" class="remove-item">Remove</button>
+                </div>
+                <button type="button" id="add-item">Add Item</button>
+            </section>
+            <section>
+                <h2>Extras</h2>
+                <input type="number" id="tax-rate" placeholder="Tax Rate (%)" step="0.01">
+                <textarea id="notes" placeholder="Additional Notes"></textarea>
+            </section>
+            <button type="submit">Generate & Download</button>
+            <button type="button" id="email-invoice" style="display:none;">Email Invoice</button>
+            <button type="button" id="setup-recurring" style="display:none;">Setup Recurring</button>
+        </form>
+        <div id="preview"></div>
+        <div id="subscription-section" style="display:none;">
+            <h2>Upgrade Subscription</h2>
+            <button id="subscribe-5">$5/month (5 invoices)</button>
+            <button id="subscribe-8">$8/month (Unlimited)</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

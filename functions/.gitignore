@@ -1,0 +1,13 @@
+# Secrets and env
+.env
+functions/.env
+
+# Node modules and locks (no need to push deps)
+node_modules/
+functions/node_modules/
+package-lock.json
+functions/package-lock.json
+
+# Logs and temp
+*.log
+.firebase/
