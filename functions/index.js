@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const functions = require('firebase-functions');
+const { onRequest, onSchedule } = require("firebase-functions/v2/https");
 const admin = require('firebase-admin');
 const express = require('express');
 const cors = require('cors');
@@ -23,7 +23,7 @@ app.post('/create-checkout-session', async (req, res) => {
             payment_method_types: ['card'],
             line_items: [{ price: priceId, quantity: 1 }],
             mode: 'subscription',
-            success_url: 'https://yourapp.com/success', // Replace with your deployed URL later
+            success_url: 'https://yourapp.com/success',
             cancel_url: 'https://yourapp.com/cancel',
             client_reference_id: userId,
         });
@@ -45,7 +45,7 @@ app.post('/stripe-webhook', async (req, res) => {
     if (event.type === 'checkout.session.completed') {
         const userId = event.data.object.client_reference_id;
         const priceId = event.data.object.line_items.data[0].price.id;
-        const tier = priceId === 'price_YOUR_5_DOLLAR_ID' ? 'basic' : 'unlimited'; // Replace with your actual price IDs or use env
+        const tier = priceId === 'price_YOUR_5_DOLLAR_ID' ? 'basic' : 'unlimited';
         await db.collection('users').doc(userId).set({ tier }, { merge: true });
     }
 
@@ -72,10 +72,10 @@ app.post('/send-email', async (req, res) => {
     }
 });
 
-exports.api = functions.https.onRequest(app);
+exports.api = onRequest(app);
 
 // Monthly Reset Invoice Counts (runs 1st of every month at midnight UTC)
-exports.monthlyReset = functions.pubsub.schedule('0 0 1 * *').onRun(async () => {
+exports.monthlyReset = onSchedule('0 0 1 * *', async () => {
     const usersSnapshot = await db.collection('users').get();
     const batch = db.batch();
     usersSnapshot.forEach(doc => {
@@ -84,7 +84,8 @@ exports.monthlyReset = functions.pubsub.schedule('0 0 1 * *').onRun(async () => 
     await batch.commit();
 });
 
-exports.processRecurring = functions.pubsub.schedule('0 0 * * *').onRun(async () => {
+// Process Recurring Invoices (daily check)
+exports.processRecurring = onSchedule('0 0 * * *', async () => {
     const recurringSnapshot = await db.collection('recurring').get();
     recurringSnapshot.forEach(async (doc) => {
         const { userId, template } = doc.data();
