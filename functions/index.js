@@ -45,7 +45,7 @@ app.post('/stripe-webhook', async (req, res) => {
     if (event.type === 'checkout.session.completed') {
         const userId = event.data.object.client_reference_id;
         const priceId = event.data.object.line_items.data[0].price.id;
-        const tier = priceId === window.APP_CONFIG.BASIC_PRICE_ID ? 'basic' : 'unlimited';
+        const tier = priceId === 'price_YOUR_5_DOLLAR_ID' ? 'basic' : 'unlimited'; // Replace with your actual price IDs or use env
         await db.collection('users').doc(userId).set({ tier }, { merge: true });
     }
 
@@ -84,13 +84,10 @@ exports.monthlyReset = functions.pubsub.schedule('0 0 1 * *').onRun(async () => 
     await batch.commit();
 });
 
-// Process Recurring Invoices (daily check)
 exports.processRecurring = functions.pubsub.schedule('0 0 * * *').onRun(async () => {
     const recurringSnapshot = await db.collection('recurring').get();
     recurringSnapshot.forEach(async (doc) => {
         const { userId, template } = doc.data();
-        // Logic to check if due (e.g., monthly); if yes, generate new invoice from template
-        // For now, stub: console.log(`Generating recurring for ${userId}`);
-        // To expand: Create new invoice doc in DB, send email using mg
+        // Stub for now; expand to generate/send invoice
     });
 });

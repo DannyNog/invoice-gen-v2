@@ -1,23 +1,24 @@
-// Replace with your new Firebase config from the fresh project
+// Replace with your Firebase config
 const firebaseConfig = {
-    apiKey: "YOUR_NEW_API_KEY",
-    authDomain: "your-new-project.firebaseapp.com",
-    projectId: "your-new-project-id",
-    storageBucket: "your-new-project.appspot.com",
-    messagingSenderId: "YOUR_NEW_SENDER_ID",
-    appId: "YOUR_NEW_APP_ID"
+    apiKey: "AIzaSyA3sjwo1phgHvPknQSlZtgB5vFQ4I9STLc",
+    authDomain: "invoice-gen-v2-97441.firebaseapp.com",
+    projectId: "invoice-gen-v2-97441",
+    storageBucket: "invoice-gen-v2-97441.firebasestorage.app",
+    messagingSenderId: "998038554384",
+    appId: "1:998038554384:web:80ea844b9f68199c8cc795",
+    measurementId: "G-VNZBZMRVX3"
 };
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Replace with your new Stripe publishable key
-const stripe = Stripe('pk_test_YOUR_NEW_PUBLISHABLE_KEY');
+// Replace with your Stripe publishable key
+const stripe = Stripe('pk_live_51SmlKBDuGftJ5Z2kw4wCZG4CNBGQWbBnLDXNOZ8Xh0RogsaWQDgA0UJT7oyGTVn9LFDphivpxFvP25FNjnMWT32c00O1fBHD5K');
 
-// Temporary config for price IDs - replace with your new Stripe price IDs
+// Temporary config for price IDs - replace with your Stripe price IDs
 window.APP_CONFIG = {
-    BASIC_PRICE_ID: 'price_YourNew5DollarPriceID',
-    UNLIMITED_PRICE_ID: 'price_YourNew8DollarPriceID'
+    BASIC_PRICE_ID: 'price_YOUR_5_DOLLAR_ID',
+    UNLIMITED_PRICE_ID: 'price_YOUR_8_DOLLAR_ID'
 };
 
 document.addEventListener('DOMContentLoaded', () => {

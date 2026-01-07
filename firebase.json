@@ -14,7 +14,7 @@
         "node_modules",
         ".git",
         "firebase-debug.log",
-        "firebase-debug.*.log",
+        "firebase-debug*.log",
         "*.local"
       ]
     }
@@ -28,7 +28,11 @@
     ],
     "rewrites": [
       {
-        "source": "**",
+        "source": "/api/**",
+        "function": "api"
+      },
+      {
+        "source": "!/api/**",
         "destination": "/index.html"
       }
     ]
